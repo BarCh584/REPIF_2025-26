@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 15%;
+    margin-top: 5vh;
+}
+
+/* (Should) User-friendly, clean design */
+header a {
+    margin-right: 10px;
+}
+
+/* placeholders for (Could) themes */
+body.light-theme {
+    background: white;
+    color: black;
+}
+
+body.dark-theme {
+    background: #222;
+    color: white;
+}
+
+/* placeholders for (Could) responsive layout */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+}
+
+.navbar {
+    justify-content: center;
+    display: inline-flex;
+    text-align: center;
+}
+
+.nav-child {
+    display: flex;
+    margin-left: 5vw;
+    text-decoration: none;
+    color: black;
+    padding: 1vw;
+}
+.nav-child:hover {
+    background-color: lightgray;
+    border-radius: 1vw;
+}
+.nav-child.selected {
+    background-color: black;
+    color: white;
+    border-radius: 1vw;
+}
