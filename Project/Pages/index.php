@@ -11,7 +11,6 @@
         <?php
         include("../Libraries/navbar.php");
         include("../Libraries/loginlib.php");
-        print($_SESSION["id"]);
         createnavbarelement("Dashboard", "index.php", true);
         createnavbarelement("My Stations", "stations.php", false);
         createnavbarelement("Collections", "collections.php", false);

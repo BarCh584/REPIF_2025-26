@@ -22,7 +22,7 @@
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = trim($_POST['username']);
         $password = $_POST['password'];
-        $stmt = $conn->prepare("SELECT user_id, password FROM users WHERE username = ?");
+        $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
         $stmt->bind_param("s", $user);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -31,12 +31,10 @@
             $hashed_password_from_db = $row['password'];
 
             if (password_verify($password, $hashed_password_from_db)) {
-                $_SESSION['id'] = $row['id'];
+                $_SESSION['id'] = $row['user_id'];
                 $_SESSION['username'] = $user;
-                print($row['id']);
-                print(var_dump($row));
-                //header("Location: index.php");
-                //exit;
+                header("Location: index.php");
+                exit;
             } else {
                 echo "Invalid username or password. Try again.";
             }

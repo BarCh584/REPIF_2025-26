@@ -53,9 +53,7 @@ CREATE TABLE user_friends (
 CREATE TABLE friend_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
     requester_id INT NOT NULL,
-    approver_id  INT NOT NULL,
-    FOREIGN KEY (requester_id) REFERENCES users(user_id),
-    FOREIGN KEY (approver_id) REFERENCES users(user_id)
+    approver_id  INT NOT NULL
 );
 
 INSERT INTO users(username, full_name, email, is_admin) VALUES 

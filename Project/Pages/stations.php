@@ -31,7 +31,7 @@
         </li>
     </ul>
 
-    <a href="station-register.html">Register new station by Serial Number</a>
+    <a href="station-register.php">Register new station by Serial Number</a>
 
 </body>
 

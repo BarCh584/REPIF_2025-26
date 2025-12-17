@@ -7,13 +7,18 @@
 <body>
 <h1>Register a Station</h1>
 
-<form>
+<form method="post">
     <label>Serial Number</label>
-    <input type="text" required>
-
-    <button>Register</button>
-</form>
-
+    <input type="text" name="serial_number" required>
+    <input type="text" name="name" required>
+    <input type="text" name="description">
+    <button type="submit">Register</button>
+</form> 
+<?php
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+}
+?>
 <p>(Could) Register via QR Code</p>
 
 </body>

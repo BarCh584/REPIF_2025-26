@@ -11,11 +11,6 @@
         <?php
         include("../Libraries/navbar.php");
         include("../Libraries/loginlib.php");
-        if(isset($_SESSION['id'])){
-            print($_SESSION["id"]);
-        }else{
-            print("No session id");
-        }
         createnavbarelement("Dashboard", "index.php", false);
         createnavbarelement("My Stations", "stations.php", false);
         createnavbarelement("Collections", "collections.php", false);
@@ -30,7 +25,7 @@
     <?php
 
     if ($_SESSION["id"] != null) {
-        $stmt = $conn->prepare("SELECT * FROM friend_requests WHERE approver_id = ? AND status = FALSE");
+        $stmt = $conn->prepare("SELECT * FROM friend_requests WHERE approver_id = ?");
         $stmt->bind_param("i", $_SESSION["id"]);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -41,10 +36,11 @@
                     <li><?= htmlspecialchars($row['requester_id']) ?> <form method="POST"><button name="accept" value="<?= $row['id'] ?>">Accept</button> <button name="decline" value="<?= $row['id'] ?>">Decline</button></form>
                     </li>
                 </ul>
-    <?php
+            <?php
             }
-        } else {
-            echo "<p>No friend requests.</p>";
+        } else { ?>
+            <p>No friend requests.</p>
+    <?php
         }
         $stmt->close();
     }
@@ -53,7 +49,7 @@
         $denyrequeststmt->bind_param("i", $_POST['decline']);
         $denyrequeststmt->execute();
         $denyrequeststmt->close();
-    } else if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accept'])) {
+    } else if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accept'])) {
         $acceptstmt = $conn->prepare("INSERT INTO user_friends (user_id, friend_id) VALUES (?, ?), (?, ?)");
         // Get requester_id from friend_requests table
         $getrequesterstmt = $conn->prepare("SELECT requester_id FROM friend_requests WHERE id = ?");
@@ -93,13 +89,29 @@
         <button type="submit">Send Friend Request</button>
     </form>
     <?php
-    
-        if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["friend_username"])) {
-            $insertfrstmt = $conn->prepare("INSERT INTO friend_requests (requester_id, approver_id) VALUES (?, ?)");
-            $insertfrstmt->bind_param("is", $_SESSION["id"], $_POST["friend_username"]);
-            $insertfrstmt->execute();
-            $insertfrstmt->close();
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["friend_username"])) {
+        $fliststmt = $conn->prepare("SELECT user_id, username FROM users WHERE username LIKE CONCAT(?, '%')");
+        $fliststmt->bind_param("s", $_POST["friend_username"]);
+        $fliststmt->execute();
+        $result = $fliststmt->get_result();
+        if($result->num_rows == 0) {
+            die ("<p>No users found.</p>");
         }
+        while ($row = $result->fetch_assoc()) { ?>
+            <form method="POST">
+                <p>Found user: <?= htmlspecialchars($row['username']) ?></p>
+                <button type="submit" name="send_request" value="<?= $row['user_id'] ?>">Send Friend Request</button>
+            </form>
+    <?php
+        }
+    }
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["send_request"])) {
+        $insertfrstmt = $conn->prepare("INSERT INTO friend_requests (requester_id, approver_id) VALUES (?, ?)");
+        $insertfrstmt->bind_param("ii", $_SESSION["id"], $_POST["send_request"]);
+        $insertfrstmt->execute();
+        $insertfrstmt->close();
+    }
     ?>
     <!-- Could: user chat -->
     <p>(Could) Chat with friends</p>
