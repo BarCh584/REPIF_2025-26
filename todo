@@ -11,8 +11,8 @@
 - [x] Logout
 - [x] Simple welcome page
 - [x] List own stations
-    - [] Edit station name
-    - [] Edit station description
+    - [x] Edit station name
+    - [x] Edit station description
 - [x] Register unassigned station by serial number
 - [x] Edit own user account
     - username, password, email, first name, last name

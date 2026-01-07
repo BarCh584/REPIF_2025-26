@@ -21,9 +21,6 @@
     </form>
     <?php
     include("../Libraries/conndb.php");
-    if(isset($_SESSION["username"])) {
-        print "test: " . $_SESSION["username"];
-    }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $insertststmt = $conn->prepare("INSERT INTO stations (pk_serialNumber, name, description, fk_user_owns) VALUES (?, ?, ?, ?)");
         $insertststmt->bind_param("ssss", $_POST["serial_number"], $_POST["name"], $_POST["description"], $_SESSION["username"]);
