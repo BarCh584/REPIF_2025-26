@@ -8,12 +8,7 @@
         <div class="navbar">
         <?php
         include("../Libraries/navbar.php");
-        createnavbarelement("Dashboard", "index.php", false);
-        createnavbarelement("My Stations", "stations.php", false);
-        createnavbarelement("Collections", "collections.php", false);
-        createnavbarelement("Friends", "friends.php", false);
-        createnavbarelement("Account", "account.php", true);
-        createnavbarelement("Logout", "logout.php", false);
+        createnavbar("Account");
         ?>
     </div>
 <h1>Edit Your Account</h1>

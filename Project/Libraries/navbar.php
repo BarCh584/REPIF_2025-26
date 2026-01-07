@@ -1,12 +1,30 @@
 <?php
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
-function createnavbarelement($elementname, $link, $isselected)
+
+function createnavbar($isselected)
 {
-    if ($isselected) {
-        echo '<a href="' . $link . '" class="nav-child selected">' . $elementname . '</a>';
-        return;
+    $websites = [
+        "Dashboard"   => "index.php",
+        "Stations"    => "stations.php",
+        "Collections" => "collections.php",
+        "Friends"     => "friends.php",
+        "Account"     => "account.php",
+    ];
+
+    if (isset($_SESSION["id"])) {
+        $websites["Logout"] = "logout.php";
     } else {
-        echo '<a href="' . $link . '" class="nav-child">' . $elementname . '</a>';
+        $websites["Login"] = "login.php";
+    }
+
+    foreach ($websites as $name => $url) {
+        $class = ($isselected === $name)
+            ? 'nav-child selected'
+            : 'nav-child';
+
+        echo '<a href="' . htmlspecialchars($url) . '" class="' . $class . '">'
+            . htmlspecialchars($name) .
+            '</a>';
     }
 }
 ?>

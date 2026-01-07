@@ -11,12 +11,8 @@
         <?php
         include("../Libraries/navbar.php");
         include("../Libraries/loginlib.php");
-        createnavbarelement("Dashboard", "index.php", false);
-        createnavbarelement("My Stations", "stations.php", false);
-        createnavbarelement("Collections", "collections.php", false);
-        createnavbarelement("Friends", "friends.php", true);
-        createnavbarelement("Account", "account.php", false);
-        createnavbarelement("Logout", "logout.php", false);
+        include("../Libraries/conndb.php");
+createnavbar("Friends");
         ?>
     </div>
     <h1>Friends</h1>

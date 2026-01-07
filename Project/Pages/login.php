@@ -7,6 +7,14 @@
 </head>
 
 <body>
+    <div class="navbar">
+        <?php
+        include("../Libraries/navbar.php");
+        include("../Libraries/loginlib.php");
+        include("../Libraries/conndb.php");
+        createnavbar("Login");
+        ?>
+    </div>
     <h1>Login</h1>
     <form method="POST">
         <label>Username</label>

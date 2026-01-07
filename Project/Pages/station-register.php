@@ -16,7 +16,7 @@
 </form> 
 <?php
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+     
 }
 ?>
 <p>(Could) Register via QR Code</p>

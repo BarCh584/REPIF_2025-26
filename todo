@@ -1,0 +1,69 @@
+############################################################
+# TODO / Requirements (Stylish Checklist)
+# File: /c:/xampp/htdocs/REPIF_2025-26/todo
+############################################################
+
+[REQUIRED]
+# Deliverables
+- Annotated source code of the website
+- Planning documentation for each user story
+
+[ACCESS: PUBLIC (Without login)]
+- [x] Login with username & password
+- [x] Registration / create new user account
+
+[ACCESS: AUTHENTICATED (Logged-in users)]
+- [x] Logout
+- [x] Simple welcome page
+- [ ] List own stations
+    - [] Edit station name
+    - [] Edit station description
+- [] Register unassigned station by serial number
+- [] Edit own user account
+    - username, password, email, first name, last name
+- [] View measurement data from own stations
+    - filter by date/time
+- [] Friend management
+    - add users as friends
+    - display friends
+    - end friendships
+- [] Collections
+    - add measurement data to collections (only from own stations)
+    - collection = (station, start datetime, end datetime)
+    - rename own collections
+    - delete own collections
+    - share collections with friends
+    - undo sharing
+    - view collections shared with you
+
+[ACCESS: ADMIN (additional)]
+- [] Edit / delete any user account
+- [] Assign admin rights
+- [] Create new user accounts
+- [] Edit / delete any station
+- [] Create new stations
+- [] View/filter/delete measurement data from all stations (by date/time)
+- [] Add measurement data from all stations to collections
+- [] Rename / delete any collection
+- Note: Admins may only share collections they created themselves
+
+[SHOULD]
+- [] Welcome dashboard showing current measurements from own stations
+- [] Appealing, user-friendly design (UX)
+- [] Validate user inputs
+- [] Friend requests require confirmation (no direct adds)
+- [] When friendship ends, automatically unshare collections between the two users
+
+[COULD - Nice to have]
+- [] Register stations via QR code
+- [] Display measurement data with diagrams / charts
+- [] Responsive design (adapt to screen sizes)
+- [] Themes (light/dark) persistent after logout
+- [] Multi-language support persistent after logout
+- [] Notifications / emails for events (friend requests, shares, errors)
+- [] User-to-user chat
+- [] Invite links to onboard new users
+
+############################################################
+# End of checklist
+############################################################

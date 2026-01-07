@@ -28,6 +28,7 @@
     </form>
     <?php
     include("../Libraries/loginlib.php");
+    include("../Libraries/conndb.php");
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         form($_POST["username"], $_POST["fullname"], $_POST["email"], $_POST["password"], $_POST["confirmpassword"]);
     }

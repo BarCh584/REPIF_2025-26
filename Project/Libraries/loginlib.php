@@ -1,13 +1,6 @@
 <?php
-$host = "localhost";
-$uname = "root";
-$psw = "";
-$dbName = "PIF_25_26";
-$conn = new mysqli($host, $uname, $psw, $dbName);
-if (session_status() != PHP_SESSION_ACTIVE) session_start();
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("conndb.php");
+
 function userAlreadyExists($username)
 {
     global $conn;

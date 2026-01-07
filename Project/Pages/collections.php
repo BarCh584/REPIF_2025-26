@@ -8,12 +8,7 @@
     <div class="navbar">
         <?php
         include("../Libraries/navbar.php");
-        createnavbarelement("Dashboard", "index.php", false);
-        createnavbarelement("My Stations", "stations.php", false);
-        createnavbarelement("Collections", "collections.php", true);
-        createnavbarelement("Friends", "friends.php", false);
-        createnavbarelement("Account", "account.php", false);
-        createnavbarelement("Logout", "logout.php", false);
+createnavbar("Collections");
         ?>
     </div>
 <h1>Your Collections</h1>

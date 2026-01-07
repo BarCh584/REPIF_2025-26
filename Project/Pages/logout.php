@@ -12,12 +12,7 @@
     <div class="navbar">
         <?php
         include("../Libraries/navbar.php");
-        createnavbarelement("Dashboard", "index.php", false);
-        createnavbarelement("My Stations", "stations.php", false);
-        createnavbarelement("Collections", "collections.php", false);
-        createnavbarelement("Friends", "friends.php", false);
-        createnavbarelement("Account", "account.php", false);
-        createnavbarelement("Logout", "logout.php", true);
+createnavbar("Logout");
         ?>
     </div>
 

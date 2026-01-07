@@ -10,25 +10,26 @@
     <div class="navbar">
         <?php
         include("../Libraries/navbar.php");
-        createnavbarelement("Dashboard", "index.php", false);
-        createnavbarelement("My Stations", "stations.php", true);
-        createnavbarelement("Collections", "collections.php", false);
-        createnavbarelement("Friends", "friends.php", false);
-        createnavbarelement("Account", "account.php", false);
-        createnavbarelement("Logout", "logout.php", false);
+        include("../Libraries/conndb.php");
+createnavbar("Stations");
         ?>
     </div>
     <h1>Your Stations</h1>
 
     <ul>
-        <li>
-            <b>Station A</b> – description<br>
-            <button>Edit name/description</button>
-        </li>
-        <li>
-            <b>Station B</b> – description<br>
-            <button>Edit name/description</button>
-        </li>
+        <?php
+        $stmt = $conn->prepare("SELECT * FROM stations WHERE owner_id = ?");
+        $stmt->bind_param("i", $_SESSION["id"]);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) { ?>
+            <li>
+                <b><?= htmlspecialchars($row['name']) ?></b> – <?= htmlspecialchars($row['description']) ?><br>
+                <button>Edit name/description</button>
+            </li>
+        <?php
+        }
+        ?>
     </ul>
 
     <a href="station-register.php">Register new station by Serial Number</a>
