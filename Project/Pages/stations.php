@@ -18,14 +18,14 @@ createnavbar("Stations");
 
     <ul>
         <?php
-        $stmt = $conn->prepare("SELECT * FROM stations WHERE owner_id = ?");
-        $stmt->bind_param("i", $_SESSION["id"]);
+        $stmt = $conn->prepare("SELECT * FROM stations WHERE name = ?");
+        $stmt->bind_param("s", $_SESSION["name"]);
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) { ?>
             <li>
                 <b><?= htmlspecialchars($row['name']) ?></b> – <?= htmlspecialchars($row['description']) ?><br>
-                <button>Edit name/description</button>
+                <button name="edit_station" value="<?= $row['pk_serialNumber'] ?>">Edit name/description</button>
             </li>
         <?php
         }

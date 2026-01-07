@@ -26,11 +26,10 @@
     </form>
     <p>No account? <a href="register.php">Register here</a></p>
     <?php
-    include("../Libraries/loginlib.php");
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = trim($_POST['username']);
         $password = $_POST['password'];
-        $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt = $conn->prepare("SELECT * FROM users WHERE pk_username = ?");
         $stmt->bind_param("s", $user);
         $stmt->execute();
         $result = $stmt->get_result();

@@ -1,8 +1,3 @@
-############################################################
-# TODO / Requirements (Stylish Checklist)
-# File: /c:/xampp/htdocs/REPIF_2025-26/todo
-############################################################
-
 [REQUIRED]
 # Deliverables
 - Annotated source code of the website
@@ -15,11 +10,11 @@
 [ACCESS: AUTHENTICATED (Logged-in users)]
 - [x] Logout
 - [x] Simple welcome page
-- [ ] List own stations
+- [x] List own stations
     - [] Edit station name
     - [] Edit station description
-- [] Register unassigned station by serial number
-- [] Edit own user account
+- [x] Register unassigned station by serial number
+- [x] Edit own user account
     - username, password, email, first name, last name
 - [] View measurement data from own stations
     - filter by date/time
@@ -63,7 +58,3 @@
 - [] Notifications / emails for events (friend requests, shares, errors)
 - [] User-to-user chat
 - [] Invite links to onboard new users
-
-############################################################
-# End of checklist
-############################################################

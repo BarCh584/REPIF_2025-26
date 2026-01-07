@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS portableindoorfeedback;
 CREATE DATABASE IF NOT EXISTS portableindoorfeedback;
 USE portableindoorfeedback;
 
-CREATE TABLE user (
+CREATE TABLE users (
   pk_username VARCHAR(50) NOT NULL,
   firstName VARCHAR(50) NOT NULL,
   lastName VARCHAR(50) NOT NULL,
@@ -13,19 +13,19 @@ CREATE TABLE user (
   UNIQUE (email)
 );
 
-CREATE TABLE station (
+CREATE TABLE stations (
   pk_serialNumber VARCHAR(50) NOT NULL,
   name VARCHAR(100),
   description TEXT,
   fk_user_owns VARCHAR(50),
   PRIMARY KEY (pk_serialNumber),
   FOREIGN KEY (fk_user_owns)
-    REFERENCES user(pk_username)
+    REFERENCES users(pk_username)
     ON DELETE SET NULL
     ON UPDATE CASCADE
 );
 
-CREATE TABLE measurement (
+CREATE TABLE measurements (
   pk_measurement INT NOT NULL AUTO_INCREMENT,
   temperature DECIMAL(5,2) NOT NULL,
   humidity DECIMAL(5,2) NOT NULL,
@@ -36,19 +36,19 @@ CREATE TABLE measurement (
   fk_station_records VARCHAR(50) NOT NULL,
   PRIMARY KEY (pk_measurement),
   FOREIGN KEY (fk_station_records)
-    REFERENCES station(pk_serialNumber)
+    REFERENCES stations(pk_serialNumber)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
 
-CREATE TABLE collection (
+CREATE TABLE collections (
   pk_collection INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(50),
   description TEXT,
   fk_user_creates VARCHAR(50) NOT NULL,
   PRIMARY KEY (pk_collection),
   FOREIGN KEY (fk_user_creates)
-    REFERENCES user(pk_username)
+    REFERENCES users(pk_username)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
@@ -58,11 +58,11 @@ CREATE TABLE contains (
   pkfk_measurement INT NOT NULL,
   PRIMARY KEY (pkfk_collection, pkfk_measurement),
   FOREIGN KEY (pkfk_collection)
-    REFERENCES collection(pk_collection)
+    REFERENCES collections(pk_collection)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   FOREIGN KEY (pkfk_measurement)
-    REFERENCES measurement(pk_measurement)
+    REFERENCES measurements(pk_measurement)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
@@ -72,11 +72,11 @@ CREATE TABLE hasaccess (
   pkfk_collection INT NOT NULL,
   PRIMARY KEY (pkfk_user, pkfk_collection),
   FOREIGN KEY (pkfk_user)
-    REFERENCES user(pk_username)
+    REFERENCES users(pk_username)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   FOREIGN KEY (pkfk_collection)
-    REFERENCES collection(pk_collection)
+    REFERENCES collections(pk_collection)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
@@ -86,11 +86,24 @@ CREATE TABLE isfriend (
   pkfk_user_friend VARCHAR(50) NOT NULL,
   PRIMARY KEY (pkfk_user_user, pkfk_user_friend),
   FOREIGN KEY (pkfk_user_user)
-    REFERENCES user(pk_username)
+    REFERENCES users(pk_username)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   FOREIGN KEY (pkfk_user_friend)
-    REFERENCES user(pk_username)
+    REFERENCES users(pk_username)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+CREATE TABLE friend_requests (
+  pkfk_user_sender VARCHAR(50) NOT NULL,
+  pkfk_user_receiver VARCHAR(50) NOT NULL,
+  PRIMARY KEY (pkfk_user_sender, pkfk_user_receiver),
+  FOREIGN KEY (pkfk_user_sender)
+    REFERENCES users(pk_username)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY (pkfk_user_receiver)
+    REFERENCES users(pk_username)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );

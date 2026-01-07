@@ -21,7 +21,7 @@ createnavbar("Friends");
     <?php
 
     if ($_SESSION["id"] != null) {
-        $stmt = $conn->prepare("SELECT * FROM friend_requests WHERE approver_id = ?");
+        $stmt = $conn->prepare("SELECT * FROM friend_requests WHERE pkfk_user_receiver = ?");
         $stmt->bind_param("i", $_SESSION["id"]);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -73,7 +73,7 @@ createnavbar("Friends");
         <li>Anna <button>End Friendship</button></li>
     </ul>
     <?php
-    $endfstmt = $conn->prepare("DELETE FROM user_friends WHERE user_id = ? AND friend_id = ?");
+    $endfstmt = $conn->prepare("DELETE FROM isfriend WHERE pkfk_user_user = ? AND pkfk_user_friend = ?");
     ?>
     <!-- Should: ending friendship unshares collections -->
 
@@ -103,7 +103,7 @@ createnavbar("Friends");
         }
     }
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["send_request"])) {
-        $insertfrstmt = $conn->prepare("INSERT INTO friend_requests (requester_id, approver_id) VALUES (?, ?)");
+        $insertfrstmt = $conn->prepare("INSERT INTO friend_requests (pkfk_user_sender, pkfk_user_receiver) VALUES (?, ?)");
         $insertfrstmt->bind_param("ii", $_SESSION["id"], $_POST["send_request"]);
         $insertfrstmt->execute();
         $insertfrstmt->close();

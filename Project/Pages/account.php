@@ -7,20 +7,61 @@
 <body>
         <div class="navbar">
         <?php
+        include("../Libraries/conndb.php");
         include("../Libraries/navbar.php");
         createnavbar("Account");
+        $selectaccountdata = $conn->prepare("SELECT * FROM users WHERE pk_username = ?");
+        $selectaccountdata->bind_param("s", $_SESSION["username"]);
+        $selectaccountdata->execute();
+        $result = $selectaccountdata->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+        }
         ?>
     </div>
 <h1>Edit Your Account</h1>
 
-<form>
-    <label>Username</label><input type="text">
-    <label>Password</label><input type="password">
-    <label>Email</label><input type="email">
-    <label>First Name</label><input type="text">
-    <label>Last Name</label><input type="text">
+<form method="POST">
+    <label>Username</label><input type="text" name="username" value="<?php echo $row['pk_username']; ?>" readonly>
+    <label>Email</label><input type="email" name="email" value="<?php echo $row['email']; ?>">
+    <label>First Name</label><input type="text" name="firstname" value="<?php echo $row['firstName']; ?>">
+    <label>Last Name</label><input type="text" name="lastname" value="<?php echo $row['lastName']; ?>">
     <button>Save</button>
+</form><br>
+<form method="POST">
+    <label>Old password</label><input type="password" name="old_password">
+    <label>New password</label><input type="password" name="new_password">
+    <button>Change Password</button>
 </form>
+<?php
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if(isset($_POST["email"],$_POST["firstname"],$_POST["lastname"])) {
+    $stmt = $conn->prepare("UPDATE users SET email = ?, firstName = ?, lastName = ? WHERE pk_username = ?");
+    $stmt->bind_param("ssss", $_POST["email"], $_POST["firstname"], $_POST["lastname"], $_SESSION["username"]);
+    $stmt->execute();
+    echo "<p>Account updated successfully!</p>";
+    }
+    if(isset($_POST["old_password"],$_POST["new_password"])) {
+        $checkstmt = $conn->prepare("SELECT password FROM users WHERE pk_username = ?");
+        $checkstmt->bind_param("s", $_SESSION["username"]);
+        $checkstmt->execute();
+        $result = $checkstmt->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if (password_verify($_POST["old_password"], $row["password"])) {
+                $new_hashed_password = password_hash($_POST["new_password"], PASSWORD_DEFAULT);
+                $updatestmt = $conn->prepare("UPDATE users SET password = ? WHERE pk_username = ?");
+                $updatestmt->bind_param("ss", $new_hashed_password, $_SESSION["username"]);
+                $updatestmt->execute();
+                echo "<p>Password changed successfully!</p>";
+            } else {
+                echo "<p>Old password is incorrect.</p>";
+            }
+        }
+    }
+}
+
+?>
 </body>
 </html>
