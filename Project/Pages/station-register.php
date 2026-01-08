@@ -25,6 +25,8 @@
         $insertststmt = $conn->prepare("INSERT INTO stations (pk_serialNumber, name, description, fk_user_owns) VALUES (?, ?, ?, ?)");
         $insertststmt->bind_param("ssss", $_POST["serial_number"], $_POST["name"], $_POST["description"], $_SESSION["username"]);
         $insertststmt->execute();
+        $insertststmt->close();
+        echo "<script>window.location.href = 'stations.php';</script>";
     }
     ?>
     <p>(Could) Register via QR Code</p>

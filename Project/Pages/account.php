@@ -22,10 +22,10 @@
 <h1>Edit Your Account</h1>
 
 <form method="POST">
-    <label>Username</label><input type="text" name="username" value="<?php echo $row['pk_username']; ?>" readonly>
-    <label>Email</label><input type="email" name="email" value="<?php echo $row['email']; ?>">
-    <label>First Name</label><input type="text" name="firstname" value="<?php echo $row['firstName']; ?>">
-    <label>Last Name</label><input type="text" name="lastname" value="<?php echo $row['lastName']; ?>">
+    <label>Username</label><input type="text" name="username" value="<?php if(isset($row["pk_username"])) echo $row['pk_username']; ?>" readonly>
+    <label>Email</label><input type="email" name="email" value="<?php if(isset($row["email"])) echo $row['email']; ?>">
+    <label>First Name</label><input type="text" name="firstname" value="<?php if(isset($row["firstName"])) echo $row['firstName']; ?>">
+    <label>Last Name</label><input type="text" name="lastname" value="<?php if(isset($row["lastName"])) echo $row['lastName']; ?>">
     <button>Save</button>
 </form><br>
 <form method="POST">

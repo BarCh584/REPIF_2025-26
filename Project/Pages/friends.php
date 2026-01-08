@@ -1,117 +1,165 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Friends</title>
     <link rel="stylesheet" href="../Styles/styles.css">
 </head>
 
 <body>
-    <div class="navbar">
-        <?php
-        include("../Libraries/navbar.php");
-        include("../Libraries/loginlib.php");
-        include("../Libraries/conndb.php");
+
+<div class="navbar">
+<?php
+include("../Libraries/navbar.php");
+include("../Libraries/loginlib.php");
+include("../Libraries/conndb.php");
 createnavbar("Friends");
-        ?>
-    </div>
-    <h1>Friends</h1>
 
-    <h2>Friend Requests (Should)</h2>
-    <?php
+if (!isset($_SESSION['username'])) {
+    die("You must be logged in.");
+}
 
-    if ($_SESSION["id"] != null) {
-        $stmt = $conn->prepare("SELECT * FROM friend_requests WHERE pkfk_user_receiver = ?");
-        $stmt->bind_param("i", $_SESSION["id"]);
+/* -------------------------------------------------
+   Helper: normalize usernames (alphabetical order)
+--------------------------------------------------*/
+function normalizeUsers($a, $b) {
+    return ($a < $b) ? [$a, $b] : [$b, $a];
+}
+
+/* -------------------------------------------------
+   HANDLE POST ACTIONS
+--------------------------------------------------*/
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    /* Send friend request */
+    if (isset($_POST['send_request'])) {
+        [$u1, $u2] = normalizeUsers($_SESSION['username'], $_POST['send_request']);
+
+        $stmt = $conn->prepare("
+            INSERT IGNORE INTO isfriend (user_one, user_two, status, action_user)
+            VALUES (?, ?, 'pending', ?)
+        ");
+        $stmt->bind_param("sss", $u1, $u2, $_SESSION['username']);
         $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) { ?>
-                // Display each friend request
-                <ul>
-                    <li><?= htmlspecialchars($row['requester_id']) ?> <form method="POST"><button name="accept" value="<?= $row['id'] ?>">Accept</button> <button name="decline" value="<?= $row['id'] ?>">Decline</button></form>
-                    </li>
-                </ul>
-            <?php
-            }
-        } else { ?>
-            <p>No friend requests.</p>
-    <?php
-        }
         $stmt->close();
     }
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['decline'])) {
-        $denyrequeststmt = $conn->prepare("DELETE FROM friend_requests WHERE id = ?");
-        $denyrequeststmt->bind_param("i", $_POST['decline']);
-        $denyrequeststmt->execute();
-        $denyrequeststmt->close();
-    } else if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accept'])) {
-        $acceptstmt = $conn->prepare("INSERT INTO user_friends (user_id, friend_id) VALUES (?, ?), (?, ?)");
-        // Get requester_id from friend_requests table
-        $getrequesterstmt = $conn->prepare("SELECT requester_id FROM friend_requests WHERE id = ?");
-        $getrequesterstmt->bind_param("i", $_POST['accept']);
-        $getrequesterstmt->execute();
-        $result = $getrequesterstmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            $requester_id = $row['requester_id'];
-            $acceptstmt->bind_param("iiii", $_SESSION['id'], $requester_id, $requester_id, $_SESSION['id']);
-            $acceptstmt->execute();
-        }
-        // Delete the friend request
-        $deleterequeststmt = $conn->prepare("DELETE FROM friend_requests WHERE id = ?");
-        $deleterequeststmt->bind_param("i", $_POST['accept']);
-        $deleterequeststmt->execute();
 
-        $acceptstmt->close();
-        $getrequesterstmt->close();
-        $deleterequeststmt->close();
+    /* Accept request */
+    if (isset($_POST['accept'])) {
+        $stmt = $conn->prepare("UPDATE isfriend SET status = 'accepted' WHERE user_one = ? AND user_two = ?");
+        $stmt->bind_param("ss", $_POST['u1'], $_POST['u2']);
+        $stmt->execute();
+        $stmt->close();
     }
-    ?>
 
-    <h2>Your Friends</h2>
-    <ul>
-        <li>Anna <button>End Friendship</button></li>
-    </ul>
-    <?php
-    $endfstmt = $conn->prepare("DELETE FROM isfriend WHERE pkfk_user_user = ? AND pkfk_user_friend = ?");
-    ?>
-    <!-- Should: ending friendship unshares collections -->
+    /* Decline request */
+    if (isset($_POST['decline'])) {
+        $stmt = $conn->prepare("DELETE FROM isfriend WHERE user_one = ? AND user_two = ?");
+        $stmt->bind_param("ss", $_POST['u1'], $_POST['u2']);
+        $stmt->execute();
+        $stmt->close();
+    }
 
-    <h2>Add Friend</h2>
-    <form method="POST">
-        <!-- Should: request system, no direct add -->
-        <label>Username</label>
-        <input type="text" name="friend_username" required>
-        <button type="submit">Send Friend Request</button>
-    </form>
-    <?php
+    /* Unfriend */
+    if (isset($_POST['unfriend'])) {
+        $stmt = $conn->prepare("DELETE FROM isfriend WHERE user_one = ? AND user_two = ?");
+        $stmt->bind_param("ss", $_POST['u1'], $_POST['u2']);
+        $stmt->execute();
+        $stmt->close();
+    }
+}
+?>
+</div>
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["friend_username"])) {
-        $fliststmt = $conn->prepare("SELECT user_id, username FROM users WHERE username LIKE CONCAT(?, '%')");
-        $fliststmt->bind_param("s", $_POST["friend_username"]);
-        $fliststmt->execute();
-        $result = $fliststmt->get_result();
-        if($result->num_rows == 0) {
-            die ("<p>No users found.</p>");
-        }
-        while ($row = $result->fetch_assoc()) { ?>
+<h1>Friends</h1>
+<h2>Friend Requests</h2>
+
+<?php
+$stmt = $conn->prepare("SELECT * FROM isfriend WHERE status = 'pending' AND action_user != ? AND (user_one = ? OR user_two = ?)");
+$stmt->bind_param("sss", $_SESSION['username'], $_SESSION['username'], $_SESSION['username']);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    echo "<p>No friend requests.</p>";
+}
+
+while ($row = $result->fetch_assoc()) {
+    $sender = ($row['user_one'] === $_SESSION['username']) ? $row['user_two'] : $row['user_one'];
+?>
+    <p>
+        <?= htmlspecialchars($sender) ?>
+        <form method="POST" style="display:inline;">
+            <input type="hidden" name="u1" value="<?= $row['user_one'] ?>">
+            <input type="hidden" name="u2" value="<?= $row['user_two'] ?>">
+            <button name="accept">Accept</button>
+            <button name="decline">Decline</button>
+        </form>
+    </p>
+<?php
+}
+$stmt->close();
+?>
+<h2>Your Friends</h2>
+<?php
+$stmt = $conn->prepare("SELECT * FROM isfriend WHERE status = 'accepted' AND (user_one = ? OR user_two = ?)");
+$stmt->bind_param("ss", $_SESSION['username'], $_SESSION['username']);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    echo "<p>You have no friends yet.</p>";
+}
+
+while ($row = $result->fetch_assoc()) {
+    $friend = ($row['user_one'] === $_SESSION['username'])
+        ? $row['user_two']
+        : $row['user_one'];
+?>
+    <p>
+        <?= htmlspecialchars($friend) ?>
+        <form method="POST" style="display:inline;">
+            <input type="hidden" name="u1" value="<?= $row['user_one'] ?>">
+            <input type="hidden" name="u2" value="<?= $row['user_two'] ?>">
+            <button name="unfriend">Unfriend</button>
+        </form>
+    </p>
+<?php
+}
+$stmt->close();
+?>
+<h2>Add Friend</h2>
+<form method="POST">
+    <label>Username</label>
+    <input type="text" name="search_user" required>
+    <button type="submit">Search</button>
+</form>
+<?php
+if (isset($_POST['search_user'])) {
+    $stmt = $conn->prepare("
+        SELECT pk_username FROM users
+        WHERE pk_username = ?
+    ");
+    $stmt->bind_param("s", $_POST['search_user']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        if ($row['pk_username'] !== $_SESSION['username']) {
+?>
             <form method="POST">
-                <p>Found user: <?= htmlspecialchars($row['username']) ?></p>
-                <button type="submit" name="send_request" value="<?= $row['user_id'] ?>">Send Friend Request</button>
+                <p>Found user: <?= htmlspecialchars($row['pk_username']) ?></p>
+                <button name="send_request" value="<?= $row['pk_username'] ?>">
+                    Send Friend Request
+                </button>
             </form>
-    <?php
+<?php
         }
+    } else {
+        echo "<p>User not found.</p>";
     }
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["send_request"])) {
-        $insertfrstmt = $conn->prepare("INSERT INTO friend_requests (pkfk_user_sender, pkfk_user_receiver) VALUES (?, ?)");
-        $insertfrstmt->bind_param("ii", $_SESSION["id"], $_POST["send_request"]);
-        $insertfrstmt->execute();
-        $insertfrstmt->close();
-    }
-    ?>
-    <!-- Could: user chat -->
-    <p>(Could) Chat with friends</p>
+    $stmt->close();
+}
+?>
 
 </body>
-
 </html>

@@ -80,30 +80,19 @@ CREATE TABLE hasaccess (
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
-
 CREATE TABLE isfriend (
-  pkfk_user_user VARCHAR(50) NOT NULL,
-  pkfk_user_friend VARCHAR(50) NOT NULL,
-  PRIMARY KEY (pkfk_user_user, pkfk_user_friend),
-  FOREIGN KEY (pkfk_user_user)
-    REFERENCES users(pk_username)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  FOREIGN KEY (pkfk_user_friend)
-    REFERENCES users(pk_username)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-);
-CREATE TABLE friend_requests (
-  pkfk_user_sender VARCHAR(50) NOT NULL,
-  pkfk_user_receiver VARCHAR(50) NOT NULL,
-  PRIMARY KEY (pkfk_user_sender, pkfk_user_receiver),
-  FOREIGN KEY (pkfk_user_sender)
-    REFERENCES users(pk_username)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  FOREIGN KEY (pkfk_user_receiver)
-    REFERENCES users(pk_username)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+  user_one VARCHAR(50) NOT NULL,
+  user_two VARCHAR(50) NOT NULL,
+  status ENUM('pending', 'accepted') NOT NULL DEFAULT 'pending',
+  action_user VARCHAR(50) NOT NULL, -- who sent the request
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (user_one, user_two),
+
+  FOREIGN KEY (user_one) REFERENCES users(pk_username)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (user_two) REFERENCES users(pk_username)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (action_user) REFERENCES users(pk_username)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );

@@ -1,8 +1,10 @@
 <?php
+include("conndb.php");
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 
 function createnavbar($isselected)
 {
+    global $conn;
     $websites = [
         "Dashboard"   => "index.php",
         "Stations"    => "stations.php",
@@ -11,20 +13,25 @@ function createnavbar($isselected)
         "Account"     => "account.php",
     ];
 
-    if (isset($_SESSION["id"])) {
+    if (isset($_SESSION["username"])) {
         $websites["Logout"] = "logout.php";
     } else {
         $websites["Login"] = "login.php";
     }
-
+    $getrolestmt = $conn->prepare("SELECT role FROM users WHERE pk_username = ?");
+    $getrolestmt->bind_param("s", $_SESSION['username']);
+    $getrolestmt->execute();
+    $row = $getrolestmt->get_result()->fetch_assoc();
+    if (isset($row["role"])) {
+        if ($row['role'] === 'admin' || $row['role'] === 'Admin') {
+            $websites["Admin"] = "admin.php";
+        }
+    }
     foreach ($websites as $name => $url) {
-        $class = ($isselected === $name)
-            ? 'nav-child selected'
-            : 'nav-child';
+        $class = ($isselected === $name) ? 'nav-child selected' : 'nav-child';
 
         echo '<a href="' . htmlspecialchars($url) . '" class="' . $class . '">'
             . htmlspecialchars($name) .
             '</a>';
     }
 }
-?>

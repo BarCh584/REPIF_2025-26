@@ -18,7 +18,7 @@
     - username, password, email, first name, last name
 - [] View measurement data from own stations
     - filter by date/time
-- [] Friend management
+- [x] Friend management
     - add users as friends
     - display friends
     - end friendships
