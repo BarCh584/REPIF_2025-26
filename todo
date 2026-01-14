@@ -32,10 +32,10 @@
     - view collections shared with you
 
 [ACCESS: ADMIN (additional)]
-- [] Edit / delete any user account
-- [] Assign admin rights
+- [x] Edit / delete any user account
+- [x] Assign admin rights
 - [] Create new user accounts
-- [] Edit / delete any station
+- [x] Edit / delete any station
 - [] Create new stations
 - [] View/filter/delete measurement data from all stations (by date/time)
 - [] Add measurement data from all stations to collections
@@ -58,3 +58,7 @@
 - [] Notifications / emails for events (friend requests, shares, errors)
 - [] User-to-user chat
 - [] Invite links to onboard new users
+
+Sprints (Lab + Workshop)
+Website + db
+raspi configuration

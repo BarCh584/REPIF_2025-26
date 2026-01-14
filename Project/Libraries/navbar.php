@@ -24,6 +24,7 @@ function createnavbar($isselected)
     $row = $getrolestmt->get_result()->fetch_assoc();
     if (isset($row["role"])) {
         if ($row['role'] === 'admin' || $row['role'] === 'Admin') {
+            $_SESSION["role"] = "Admin";
             $websites["Admin"] = "admin.php";
         }
     }
