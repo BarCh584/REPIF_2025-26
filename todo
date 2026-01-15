@@ -34,7 +34,7 @@
 [ACCESS: ADMIN (additional)]
 - [x] Edit / delete any user account
 - [x] Assign admin rights
-- [] Create new user accounts
+- [x] Create new user accounts
 - [x] Edit / delete any station
 - [] Create new stations
 - [] View/filter/delete measurement data from all stations (by date/time)
@@ -46,7 +46,7 @@
 - [] Welcome dashboard showing current measurements from own stations
 - [] Appealing, user-friendly design (UX)
 - [] Validate user inputs
-- [] Friend requests require confirmation (no direct adds)
+- [x] Friend requests require confirmation (no direct adds)
 - [] When friendship ends, automatically unshare collections between the two users
 
 [COULD - Nice to have]

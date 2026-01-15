@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../Styles/styles.css">
 </head>
 
-<body>
+<body class="light-theme">
     <h1>Register a Station</h1>
 
     <form method="post">

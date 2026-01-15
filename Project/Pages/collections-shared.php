@@ -4,7 +4,7 @@
     <title>Shared Collections</title>
     <link rel="stylesheet" href="../Styles/styles.css">
 </head>
-<body>
+<body class="light-theme">
 
 <h1>Collections Shared With You</h1>
 

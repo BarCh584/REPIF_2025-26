@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <div class="navbar">
+    <body class="light-theme">
         <?php
         include("../Libraries/navbar.php");
         include("../Libraries/loginlib.php");

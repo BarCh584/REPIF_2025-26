@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../Styles/styles.css">
 </head>
 
-<body>
+<body class="light-theme">
     <h1>Register</h1>
 
     <form method="POST">

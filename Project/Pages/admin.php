@@ -1,13 +1,17 @@
 <?php
 session_start();
-require "../Libraries/conndb.php";
+require "../Libraries/loginlib.php";
+require("../Libraries/navbar.php");
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
     header("Location: login.php");
     exit;
 }
 $user = null;
 $error = null;
-
+if (isset($_GET['clear'])) {
+    header("Location: admin.php");
+    exit;
+}
 if (!empty($_GET['username'])) {
     $stmt = $conn->prepare("
         SELECT pk_username, firstName, lastName, email, role
@@ -101,6 +105,32 @@ if (isset($_POST['action'])) {
     header("Location: admin.php?username=" . urlencode($username));
     exit;
 }
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['createaccount'])) {
+    form($_POST["username"], $_POST["firstName"], $_POST["lastName"], $_POST["email"], $_POST["password"], $_POST["confirmPassword"]);
+}
+function form($username, $firstname, $lastname, $email, $password, $confirmpassword)
+{
+    global $conn;
+    if (!isset($username, $firstname, $lastname, $email, $password, $confirmpassword)) {
+        die("Please fill all in all of the fields!");
+    }
+    if ($password != $confirmpassword) {
+        die("<p>Passwords do not match!</p>");
+    }
+    if (userAlreadyExists($username)) {
+        die("<p>Username already exists!</p>");
+    }
+    if (emailAlreadyExists($email)) {
+        die("<p>Email already registered!</p>");
+    }
+    $hashedpassword = password_hash($password, PASSWORD_DEFAULT);
+    $registerstmt = $conn->prepare("INSERT INTO users (pk_username, password, email, firstName, lastName) VALUES (?, ?, ?, ?, ?)");
+    $registerstmt->bind_param("sssss", $username, $hashedpassword, $email, $firstname, $lastname);
+    $registerstmt->execute();
+    echo "<p>You have been registered sucessfully!</p>";
+    header("Location: login.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -115,7 +145,7 @@ if (isset($_POST['action'])) {
     function updateUserField(input) {
         const field = input.dataset.field;
         const value = input.value;
-        const username = "<?= htmlspecialchars($user['pk_username']) ?>";
+        const username = "<?= htmlspecialchars($user['pk_username'] ?? '') ?>";
 
         $.post(
                 "../Libraries/updateuserinfo.php", {
@@ -150,15 +180,17 @@ if (isset($_POST['action'])) {
     }
 </script>
 
-<body>
+<body class="light-theme">
+
+    <div class="navbar">
+        <?php createnavbar("Admin") ?>
+    </div>
     <h1>Admin Panel</h1>
     <hr>
     <form method="GET">
-        <input type="text" name="username"
-            placeholder="Enter exact username"
-            value="<?= htmlspecialchars($_GET['username'] ?? '') ?>"
-            required>
+        <input type="text" name="username" placeholder="Enter exact username" value="<?= htmlspecialchars($_GET['username'] ?? '') ?>" required>
         <button type="submit">Load User</button>
+        <button type="submit" name="clear" value="1">Clear</button>
     </form>
     <?php if ($error) { ?>
         <p style="color:red"><?= htmlspecialchars($error) ?></p>
@@ -254,12 +286,7 @@ if (isset($_POST['action'])) {
             </tr>
 
             <?php
-            $stmt = $conn->prepare("
-                SELECT m.* FROM measurements m
-                JOIN stations s ON s.pk_serialNumber = m.fk_station_records
-                WHERE s.fk_user_owns = ?
-                ORDER BY m.timestamp DESC
-            ");
+            $stmt = $conn->prepare("SELECT m.* FROM measurements m JOIN stations s ON s.pk_serialNumber = m.fk_station_records WHERE s.fk_user_owns = ? ORDER BY m.timestamp DESC");
             $stmt->bind_param("s", $user['pk_username']);
             $stmt->execute();
             $res = $stmt->get_result();
@@ -313,7 +340,21 @@ if (isset($_POST['action'])) {
             <?php } ?>
         </table>
 
-    <?php } ?>
+    <?php } else { ?>
+        <br>
+        <h2>Or create a new user account</h2>
+        <form method="POST">
+            <input required type="text" name="username" placeholder="username">
+            <input required type="text" name="firstName" placeholder="First Name">
+            <input required type="text" name="lastName" placeholder="Last Name">
+            <input required type="email" name="email" placeholder="Email">
+            <input required type="password" name="password" placeholder="Password">
+            <input required type="password" name="confirmPassword" placeholder="Confirm Password">
+            <input required type="submit" name="createaccount" value="Create new user account">
+        </form>
+    <?php }
+
+    ?>
 
 </body>
 

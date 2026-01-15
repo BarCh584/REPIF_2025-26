@@ -1,51 +1,224 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 15%;
-    margin-top: 5vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f6f8;
+    color: #222;
+    min-height: 100vh;
+    padding: 4vh 8vw;
 }
 
-/* (Should) User-friendly, clean design */
-header a {
-    margin-right: 10px;
-}
-
-/* placeholders for (Could) themes */
 body.light-theme {
-    background: white;
-    color: black;
+    background-color: #f4f6f8;
+    color: #222;
 }
 
 body.dark-theme {
-    background: #222;
-    color: white;
+    background-color: #121212;
+    color: #eaeaea;
 }
 
-/* placeholders for (Could) responsive layout */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
+h1 {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 1.4rem;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    color: #444;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 800px;
 }
 
 .navbar {
+    display: flex;
     justify-content: center;
-    display: inline-flex;
-    text-align: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 4vh;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .nav-child {
-    display: flex;
-    margin-left: 5vw;
     text-decoration: none;
-    color: black;
-    padding: 1vw;
+    color: #333;
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
+
 .nav-child:hover {
-    background-color: lightgray;
-    border-radius: 1vw;
+    background-color: #e6e6e6;
 }
+
 .nav-child.selected {
-    background-color: black;
-    color: white;
-    border-radius: 1vw;
+    background-color: #1f2937;
+    color: #ffffff;
+}
+
+.chart-placeholder {
+    margin-top: 2rem;
+    height: 280px;
+    max-width: 900px;
+    background-color: #ffffff;
+    border: 2px dashed #cfd4da;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+    font-style: italic;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+ul {
+    list-style: none;
+    margin-top: 2rem;
+    max-width: 900px;
+    padding: 0;
+}
+
+ul li {
+    background-color: #ffffff;
+    border-radius: 14px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+ul li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+ul li b {
+    font-size: 1.1rem;
+    color: #1f2937;
+}
+
+ul li br + button {
+    margin-top: 0.8rem;
+}
+
+button {
+    margin-top: 0.6rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #1f2937;
+    color: #ffffff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+    background-color: #374151;
+    transform: scale(1.03);
+}
+
+a[href*="station-register"] {
+    display: inline-block;
+    margin-top: 2rem;
+    text-decoration: none;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: #2563eb;
+    padding: 0.7rem 1.4rem;
+    border-radius: 10px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+a[href*="station-register"]:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.03);
+}
+
+body.dark-theme .navbar,
+body.dark-theme .chart-placeholder {
+    background-color: #1e1e1e;
+    border-color: #333;
+}
+
+body.dark-theme .nav-child {
+    color: #eaeaea;
+}
+
+body.dark-theme .nav-child:hover {
+    background-color: #2a2a2a;
+}
+
+body.dark-theme .nav-child.selected {
+    background-color: #ffffff;
+    color: #121212;
+}
+
+body.dark-theme ul li {
+    background-color: #1e1e1e;
+    color: #eaeaea;
+}
+
+body.dark-theme ul li b {
+    color: #ffffff;
+}
+
+body.dark-theme button {
+    background-color: #ffffff;
+    color: #121212;
+}
+
+body.dark-theme button:hover {
+    background-color: #e5e5e5;
+}
+
+body.dark-theme a[href*="station-register"] {
+    background-color: #3b82f6;
+}
+
+body.dark-theme a[href*="station-register"]:hover {
+    background-color: #2563eb;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 3vh 4vw;
+    }
+
+    .navbar {
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .chart-placeholder {
+        height: 220px;
+    }
+
+    ul li {
+        padding: 1.1rem;
+    }
+
+    button,
+    a[href*="station-register"] {
+        width: 100%;
+        text-align: center;
+    }
 }
