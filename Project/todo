@@ -44,8 +44,8 @@
 
 [SHOULD]
 - [] Welcome dashboard showing current measurements from own stations
-- [] Appealing, user-friendly design (UX)
-- [] Validate user inputs
+- [x] Appealing, user-friendly design (UX)
+- [x] Validate user inputs
 - [x] Friend requests require confirmation (no direct adds)
 - [] When friendship ends, automatically unshare collections between the two users
 
