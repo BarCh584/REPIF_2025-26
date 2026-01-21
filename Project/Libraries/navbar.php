@@ -9,6 +9,7 @@ function createnavbar($isselected)
         "Dashboard"   => "index.php",
         "Stations"    => "stations.php",
         "Collections" => "collections.php",
+        "Measurements" => "measurements.php",
         "Friends"     => "friends.php",
         "Account"     => "account.php",
     ];

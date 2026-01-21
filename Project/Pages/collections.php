@@ -7,10 +7,10 @@
 </head>
 
 <body class="light-theme">
-        <?php
-        include("../Libraries/navbar.php");
-        createnavbar("Collections");
-        ?>
+    <?php
+    include("../Libraries/navbar.php");
+    createnavbar("Collections");
+    ?>
     <h1>Your Collections</h1>
 
     <button>Create Collection</button>
@@ -22,6 +22,7 @@
             <button>Delete</button>
             <button>Share</button>
         </li>
+
     </ul>
 
 </body>
