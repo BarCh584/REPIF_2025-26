@@ -7,13 +7,11 @@
 </head>
 
 <body class="light-theme">
-    <div class="navbar">
         <?php
         include("../Libraries/navbar.php");
         include("../Libraries/conndb.php");
         createnavbar("Stations");
         ?>
-    </div>
     <h1>Your Stations</h1>
 
     <ul>

@@ -8,14 +8,11 @@
     <link rel="stylesheet" href="../Styles/styles.css">
 </head>
 
-<body>
-
-    <body class="light-theme">
+<body class="light-theme">
         <?php
         include("../Libraries/navbar.php");
         createnavbar("Logout");
         ?>
-        </div>
 
         <h1>Logout</h1>
         <p>You are about to log out. Are you sure you want to do this?</p>

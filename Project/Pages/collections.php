@@ -7,12 +7,10 @@
 </head>
 
 <body class="light-theme">
-    <div class="navbar">
         <?php
         include("../Libraries/navbar.php");
         createnavbar("Collections");
         ?>
-    </div>
     <h1>Your Collections</h1>
 
     <button>Create Collection</button>

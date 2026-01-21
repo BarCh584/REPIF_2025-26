@@ -123,9 +123,7 @@ if (isset($_POST['action'])) {
 
 <body class="light-theme">
 
-    <div class="navbar">
         <?php createnavbar("Admin") ?>
-    </div>
 
     <h1>Admin Panel</h1>
 

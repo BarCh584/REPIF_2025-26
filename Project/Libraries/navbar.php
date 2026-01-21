@@ -28,6 +28,7 @@ function createnavbar($isselected)
             $websites["Admin"] = "admin.php";
         }
     }
+    echo "<div class='navbar'>";
     foreach ($websites as $name => $url) {
         $class = ($isselected === $name) ? 'nav-child selected' : 'nav-child';
 
@@ -35,4 +36,5 @@ function createnavbar($isselected)
             . htmlspecialchars($name) .
             '</a>';
     }
+    echo "</div>";
 }

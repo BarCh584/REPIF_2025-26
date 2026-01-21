@@ -7,13 +7,11 @@
 </head>
 
 <body class="light-theme">
-        <div class="navbar">
             <?php
             include("../Libraries/navbar.php");
             include("../Libraries/loginlib.php");
             createnavbar("Dashboard");
             ?>
-        </div>
         <h1>Welcome!</h1>
 
         <h2>Dashboard (Should)</h2>

@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="../Styles/styles.css">
 </head>
 <body class="light-theme">
-        <div class="navbar">
         <?php
         include("../Libraries/conndb.php");
         include("../Libraries/navbar.php");
@@ -18,7 +17,6 @@
             $row = $result->fetch_assoc();
         }
         ?>
-    </div>
 <h1>Edit Your Account</h1>
 
 <form method="POST">

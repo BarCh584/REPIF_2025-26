@@ -6,15 +6,13 @@
     <link rel="stylesheet" href="../Styles/styles.css">
 </head>
 
-<body>
-    <body class="light-theme">
+<body class="light-theme">
         <?php
         include("../Libraries/navbar.php");
         include("../Libraries/loginlib.php");
         include("../Libraries/conndb.php");
         createnavbar("Login");
         ?>
-    </div>
     <h1>Login</h1>
     <form method="POST">
         <label>Username</label>

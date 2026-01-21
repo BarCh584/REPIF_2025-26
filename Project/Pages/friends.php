@@ -8,57 +8,55 @@
 
 <body class="light-theme">
 
-    <div class="navbar">
-        <?php
-        include("../Libraries/navbar.php");
-        include("../Libraries/loginlib.php");
-        include("../Libraries/conndb.php");
-        createnavbar("Friends");
-        function normalizeUsers($a, $b)
-        {
-            return ($a < $b) ? [$a, $b] : [$b, $a];
-        }
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    <?php
+    include("../Libraries/navbar.php");
+    include("../Libraries/loginlib.php");
+    include("../Libraries/conndb.php");
+    createnavbar("Friends");
+    function normalizeUsers($a, $b)
+    {
+        return ($a < $b) ? [$a, $b] : [$b, $a];
+    }
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-            /* Send friend request */
-            if (isset($_POST['send_request'])) {
-                [$u1, $u2] = normalizeUsers($_SESSION['username'], $_POST['send_request']);
+        /* Send friend request */
+        if (isset($_POST['send_request'])) {
+            [$u1, $u2] = normalizeUsers($_SESSION['username'], $_POST['send_request']);
 
-                $stmt = $conn->prepare("
+            $stmt = $conn->prepare("
             INSERT IGNORE INTO isfriend (user_one, user_two, status, action_user)
             VALUES (?, ?, 'pending', ?)
         ");
-                $stmt->bind_param("sss", $u1, $u2, $_SESSION['username']);
-                $stmt->execute();
-                $stmt->close();
-            }
-
-            // Accept request 
-            if (isset($_POST['accept'])) {
-                $stmt = $conn->prepare("UPDATE isfriend SET status = 'accepted' WHERE user_one = ? AND user_two = ?");
-                $stmt->bind_param("ss", $_POST['u1'], $_POST['u2']);
-                $stmt->execute();
-                $stmt->close();
-            }
-
-            // Decline request 
-            if (isset($_POST['decline'])) {
-                $stmt = $conn->prepare("DELETE FROM isfriend WHERE user_one = ? AND user_two = ?");
-                $stmt->bind_param("ss", $_POST['u1'], $_POST['u2']);
-                $stmt->execute();
-                $stmt->close();
-            }
-
-            // Unfriend 
-            if (isset($_POST['unfriend'])) {
-                $stmt = $conn->prepare("DELETE FROM isfriend WHERE user_one = ? AND user_two = ?");
-                $stmt->bind_param("ss", $_POST['u1'], $_POST['u2']);
-                $stmt->execute();
-                $stmt->close();
-            }
+            $stmt->bind_param("sss", $u1, $u2, $_SESSION['username']);
+            $stmt->execute();
+            $stmt->close();
         }
-        ?>
-    </div>
+
+        // Accept request 
+        if (isset($_POST['accept'])) {
+            $stmt = $conn->prepare("UPDATE isfriend SET status = 'accepted' WHERE user_one = ? AND user_two = ?");
+            $stmt->bind_param("ss", $_POST['u1'], $_POST['u2']);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        // Decline request 
+        if (isset($_POST['decline'])) {
+            $stmt = $conn->prepare("DELETE FROM isfriend WHERE user_one = ? AND user_two = ?");
+            $stmt->bind_param("ss", $_POST['u1'], $_POST['u2']);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        // Unfriend 
+        if (isset($_POST['unfriend'])) {
+            $stmt = $conn->prepare("DELETE FROM isfriend WHERE user_one = ? AND user_two = ?");
+            $stmt->bind_param("ss", $_POST['u1'], $_POST['u2']);
+            $stmt->execute();
+            $stmt->close();
+        }
+    }
+    ?>
     <?php
     if (!isset($_SESSION['username'])) {
         die("You must be logged in.");
