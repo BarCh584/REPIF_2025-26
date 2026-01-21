@@ -6,7 +6,7 @@ function createnavbar($isselected)
 {
     global $conn;
     $websites = [
-        "Dashboard"   => "index.php",
+        "Dashboard"   => "dashboard.php",
         "Stations"    => "stations.php",
         "Collections" => "collections.php",
         "Measurements" => "measurements.php",

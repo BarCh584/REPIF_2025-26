@@ -413,3 +413,8 @@ input[type="submit"]:hover {
   background-color: #374151;
   transform: scale(1.03);
 }
+
+.ahref {
+  color: #3f73e4;
+ text-decoration: none;
+}

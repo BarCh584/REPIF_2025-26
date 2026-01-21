@@ -21,6 +21,8 @@
     $selectstationsstmt->execute();
     $result = $selectstationsstmt->get_result();
     ?>
+    <div class="form-card">
+        <div class="form-group">
     <select name="stationslist" id="stationslist">
         <?php
         while ($row = $result->fetch_assoc()) {
@@ -28,7 +30,9 @@
         }
         ?>
     </select>
+    </div>
     <button type="submit" value="Create measurement" id="createMeasurementButton">Create Measurement</button>
+    </div>
     <table id="tablemeasurements">
         <tr>
             <th>Time</th>

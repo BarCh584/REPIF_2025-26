@@ -123,7 +123,7 @@ if (isset($_POST['action'])) {
 
 <body class="light-theme">
 
-        <?php createnavbar("Admin") ?>
+    <?php createnavbar("Admin") ?>
 
     <h1>Admin Panel</h1>
 

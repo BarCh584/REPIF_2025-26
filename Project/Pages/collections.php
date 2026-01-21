@@ -12,8 +12,7 @@
     createnavbar("Collections");
     ?>
     <h1>Your Collections</h1>
-
-    <button>Create Collection</button>
+    <button onclick="window.location.href = 'collections.create.php'">Create Collection</button>
 
     <ul>
         <li>
