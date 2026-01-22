@@ -44,17 +44,28 @@
         </tr>
 
     </table>
-    <script>
-        function start() {
-            $.post("../Libraries/createmeasurement.php", {
-                stationslist: $("#stationslist").val()
-            }, function(data) {
-                $("#tablemeasurements").append(data);
-            });
-        }
+<script>
+    function start() {
+        $.post("../Libraries/createmeasurement.php", {
+            stationslist: $("#stationslist").val()
+        }, function(data) {
+            // insert newest measurement at the top
+            $("#tablemeasurements tr:first").after(data);
+        });
+    }
 
-        $("#createMeasurementButton").click(start);
-    </script>
+    $("#createMeasurementButton").click(start);
+
+    function loadMeasurements() {
+        $.post("../Libraries/showmeasurements.php", {
+            station: $("#stationslist").val()
+        }, function(data) {
+            $("#tablemeasurements").append(data);
+        });
+    }
+
+    loadMeasurements();
+</script>
 
 </body>
 

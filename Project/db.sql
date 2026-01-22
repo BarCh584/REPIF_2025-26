@@ -45,11 +45,18 @@ CREATE TABLE collections (
   pk_collection INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(50),
   description TEXT,
+  started_at DATETIME NOT NULL,
+  ended_at DATETIME NOT NULL,
   fk_user_creates VARCHAR(50) NOT NULL,
+  fk_station_associated VARCHAR(50),
   PRIMARY KEY (pk_collection),
   FOREIGN KEY (fk_user_creates)
     REFERENCES users(pk_username)
     ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY (fk_station_associated)
+    REFERENCES stations(pk_serialNumber)
+    ON DELETE SET NULL
     ON UPDATE CASCADE
 );
 

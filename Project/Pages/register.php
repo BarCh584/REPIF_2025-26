@@ -55,7 +55,7 @@
         $registerstmt->bind_param("sssss", $username, $hashedpassword, $email, $firstname, $lastname);
         $registerstmt->execute();
         echo "<p>You have been registered sucessfully!</p>";
-        header("Location: login.php");
+        header("Location: index.php");
     }
 
     ?>

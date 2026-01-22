@@ -18,6 +18,10 @@
             <input type="text" placeholder="Collection name" name="collectionname" required>
         </div>
         <div class="form-group">
+            <label>Description</label>
+            <textarea name="description" placeholder="Description" required></textarea>
+        </div>
+        <div class="form-group">
             <label>Station</label>
             <?php
             $selectstationsstmt = $conn->prepare("SELECT * FROM stations WHERE fk_user_owns = ?");
@@ -44,16 +48,19 @@
         <input type="submit" value="Create Collection">
     </form>
     <?php
-    if($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $station = $_POST['stationslist'];
         $collectionname = $_POST['collectionname'];
+        $description = $_POST["description"];
         $station = $_POST['stationslist'];
         $startdate = $_POST['startdate'];
         $enddate = $_POST['enddate'];
 
-        $insertcollectionstmt = $conn->prepare("INSERT INTO collections (name, fk_user_owns, fk_station, start_date, end_date) VALUES (?, ?, ?, ?, ?)");
-        $insertcollectionstmt->bind_param("sisss", $collectionname, $_SESSION['username'], $station, $startdate, $enddate);
+        $insertcollectionstmt = $conn->prepare("INSERT INTO collections (name, description, started_at, ended_at, fk_user_creates, fk_station_associated) VALUES (?, ?, ?, ?, ?, ?)");
+        $insertcollectionstmt->bind_param("ssssss", $collectionname, $description, $startdate, $enddate, $_SESSION['username'], $station);
         if ($insertcollectionstmt->execute()) {
             echo "<p>Collection '" . htmlspecialchars($collectionname) . "' created successfully!</p>";
+            echo "<script>window.location.href = 'collections.php';</script>";
         } else {
             echo "<p>Error creating collection: " . htmlspecialchars($conn->error) . "</p>";
         }
