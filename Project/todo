@@ -16,13 +16,13 @@
 - [x] Register unassigned station by serial number
 - [x] Edit own user account
     - username, password, email, first name, last name
-- [] View measurement data from own stations
+- [x] View measurement data from own stations
     - filter by date/time
 - [x] Friend management
     - add users as friends
     - display friends
     - end friendships
-- [] Collections
+- [x] Collections
     - add measurement data to collections (only from own stations)
     - collection = (station, start datetime, end datetime)
     - rename own collections

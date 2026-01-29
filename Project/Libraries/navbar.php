@@ -31,11 +31,20 @@ function createnavbar($isselected)
     }
     echo "<div class='navbar'>";
     foreach ($websites as $name => $url) {
-        $class = ($isselected === $name) ? 'nav-child selected' : 'nav-child';
+        $class = ($isselected === $name) ? 'nav-child selected' : 'nav-child'; ?>
 
-        echo '<a href="' . htmlspecialchars($url) . '" class="' . $class . '">'
-            . htmlspecialchars($name) .
-            '</a>';
+        <a href="<?= htmlspecialchars($url) ?>" class="<?= $class ?>">
+            <?= htmlspecialchars($name)  ?> </a>
+
+    <?php
     }
-    echo "</div>";
+    ?>
+    <select>
+        <option value="light" <?php if (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'light') echo 'selected'; ?>>Light Theme</option>
+        <option value="dark" <?php if (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'dark') echo 'selected'; ?>>Dark Theme</option>
+    </select>
+    </div>
+
+<?php
 }
+?>

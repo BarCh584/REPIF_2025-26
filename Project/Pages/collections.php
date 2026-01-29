@@ -14,6 +14,7 @@
     ?>
     <h1>Your Collections</h1>
     <button onclick="window.location.href = 'collections.create.php'">Create Collection</button>
+    <button onclick="window.location.href = 'collections-shared.php'">View Shared Collections</button>
 
     <ul>
     <?php
@@ -24,9 +25,9 @@
     while ($row = $result->fetch_assoc()) {
         echo "<li>";
         echo "<b>" . htmlspecialchars($row['name']) . "</b>";
+        echo " <button onclick=\"window.location.href='collections.display.php?id=" . $row['pk_collection'] . "'\">View</button>";
         echo " <button onclick=\"window.location.href='collections.edit.php?id=" . $row['pk_collection'] . "'\">Edit</button>";
         echo " <button onclick=\"if(confirm('Are you sure you want to delete this collection?')) { window.location.href='collections.delete.php?id=" . $row['pk_collection'] . "'; }\">Delete</button>";
-        echo " <button onclick=\"window.location.href='collections.share.php?id=" . $row['pk_collection'] . "'\">Share</button>";
         echo "<br><b>Description: " . htmlspecialchars($row['description']) . "</b>";
         echo "<br><br>(" . htmlspecialchars($row['started_at']) . " - " . htmlspecialchars($row['ended_at']) . ")";
         echo "</li>";

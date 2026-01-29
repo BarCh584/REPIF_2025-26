@@ -418,3 +418,134 @@ input[type="submit"]:hover {
   color: #3f73e4;
  text-decoration: none;
 }
+/* =========================
+   GLOBAL DARK THEME TUNING
+========================= */
+body.dark-theme {
+  background-color: #0f1115;
+  color: #e5e7eb;
+}
+
+/* Headings */
+body.dark-theme h1,
+body.dark-theme h2 {
+  color: #f9fafb;
+}
+
+/* Paragraph text */
+body.dark-theme p {
+  color: #d1d5db;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+body.dark-theme .navbar {
+  background-color: #16181d;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .nav-child {
+  color: #e5e7eb;
+}
+
+body.dark-theme .nav-child:hover {
+  background-color: #23262d;
+}
+
+body.dark-theme .nav-child.selected {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+/* =========================
+   CARDS / CONTAINERS
+========================= */
+body.dark-theme ul li,
+body.dark-theme .form-card,
+body.dark-theme .admin-card,
+body.dark-theme .chart-placeholder {
+  background-color: #16181d;
+  border-color: #2a2d34;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
+}
+
+/* Card hover */
+body.dark-theme ul li:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7);
+}
+
+/* =========================
+   TEXT ACCENTS
+========================= */
+body.dark-theme ul li b {
+  color: #f9fafb;
+}
+
+body.dark-theme .role-pill {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+body.dark-theme button,
+body.dark-theme input[type="submit"] {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+body.dark-theme button:hover,
+body.dark-theme input[type="submit"]:hover {
+  background-color: #2563eb;
+}
+
+/* =========================
+   LINKS
+========================= */
+body.dark-theme .ahref {
+  color: #93c5fd;
+}
+
+body.dark-theme a[href*="station-register"] {
+  background-color: #3b82f6;
+}
+
+body.dark-theme a[href*="station-register"]:hover {
+  background-color: #2563eb;
+}
+
+/* =========================
+   FORMS
+========================= */
+body.dark-theme .form-group input,
+body.dark-theme .form-group select,
+body.dark-theme .form-group textarea,
+body.dark-theme .admin-table input {
+  background-color: #0f1115;
+  color: #e5e7eb;
+  border-color: #2a2d34;
+}
+
+body.dark-theme .form-group label {
+  color: #cbd5f5;
+}
+
+body.dark-theme .form-group input:focus,
+body.dark-theme .form-group select:focus,
+body.dark-theme .form-group textarea:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.35);
+}
+
+/* =========================
+   TABLE
+========================= */
+body.dark-theme .admin-table th {
+  color: #9ca3af;
+}
+
+body.dark-theme .admin-table tr + tr {
+  border-color: #2a2d34;
+}

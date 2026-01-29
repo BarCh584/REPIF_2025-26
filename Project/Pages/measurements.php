@@ -23,49 +23,149 @@
     ?>
     <div class="form-card">
         <div class="form-group">
-    <select name="stationslist" id="stationslist">
-        <?php
-        while ($row = $result->fetch_assoc()) {
-            echo "<option value='" . $row['pk_serialNumber'] . "'>" . htmlspecialchars($row['name']) . "</option>";
-        }
-        ?>
-    </select>
+            <select name="stationslist" id="stationslist">
+                <?php
+                while ($row = $result->fetch_assoc()) {
+                    echo "<option value='" . $row['pk_serialNumber'] . "'>" . htmlspecialchars($row['name']) . "</option>";
+                }
+                ?>
+            </select>
+        </div>
+        <button type="submit" value="Create measurement" id="createMeasurementButton">Create Measurement</button>
     </div>
-    <button type="submit" value="Create measurement" id="createMeasurementButton">Create Measurement</button>
+    <div class="form-card">
+        <div class="form-group">
+            <label>From</label>
+            <input type="datetime-local" id="fromTime">
+        </div>
+
+        <div class="form-group">
+            <label>To</label>
+            <input type="datetime-local" id="toTime">
+        </div>
+
+        <button id="filterTime">Filter</button>
+        <button id="clearFilter">Clear</button>
     </div>
+
     <table id="tablemeasurements">
         <tr>
-            <th>Time</th>
-            <th>Temperature</th>
-            <th>Humidity</th>
-            <th>Pressure</th>
-            <th>Light</th>
-            <th>Gas</th>
+            <th data-col="0">Time <span class="arrow"></span></th>
+            <th data-col="1">Temperature <span class="arrow"></span></th>
+            <th data-col="2">Humidity <span class="arrow"></span></th>
+            <th data-col="3">Pressure <span class="arrow"></span></th>
+            <th data-col="4">Light <span class="arrow"></span></th>
+            <th data-col="5">Gas <span class="arrow"></span></th>
         </tr>
-
     </table>
-<script>
-    function start() {
-        $.post("../Libraries/createmeasurement.php", {
-            stationslist: $("#stationslist").val()
-        }, function(data) {
-            // insert newest measurement at the top
-            $("#tablemeasurements tr:first").after(data);
+
+    <script>
+        let sortDirections = {};
+        let activeColumn = null;
+
+        // ---------- LOAD DATA ----------
+        function start() {
+            $.post("../Libraries/createmeasurement.php", {
+                stationslist: $("#stationslist").val()
+            }, function(data) {
+                $("#tablemeasurements tr:first").after(data);
+                applyCurrentSort();
+            });
+        }
+
+        $("#createMeasurementButton").click(start);
+
+        function loadMeasurements() {
+            $.post("../Libraries/showmeasurements.php", {
+                station: $("#stationslist").val()
+            }, function(data) {
+                $("#tablemeasurements").append(data);
+            });
+        }
+
+        loadMeasurements();
+
+        // ---------- SORTING ----------
+        $("#tablemeasurements th").each(function(index) {
+            sortDirections[index] = 1;
+
+            $(this).css("cursor", "pointer").click(function() {
+                if (activeColumn === index) {
+                    sortDirections[index] *= -1;
+                } else {
+                    activeColumn = index;
+                }
+
+                updateArrows(index);
+                sortTable(index);
+            });
         });
-    }
 
-    $("#createMeasurementButton").click(start);
+        function updateArrows(col) {
+            $(".arrow").text("");
+            let arrow = sortDirections[col] === 1 ? "▲" : "▼";
+            $("#tablemeasurements th").eq(col).find(".arrow").text(arrow);
+        }
 
-    function loadMeasurements() {
-        $.post("../Libraries/showmeasurements.php", {
-            station: $("#stationslist").val()
-        }, function(data) {
-            $("#tablemeasurements").append(data);
+        function sortTable(col) {
+            let table = $("#tablemeasurements");
+            let rows = table.find("tr:gt(0)").toArray();
+            let dir = sortDirections[col];
+
+            rows.sort(function(a, b) {
+                let A = $(a).children("td").eq(col).text().trim();
+                let B = $(b).children("td").eq(col).text().trim();
+
+                // timestamp sort (column 0)
+                if (col === 0) {
+                    return (new Date(A) - new Date(B)) * dir;
+                }
+
+                let numA = parseFloat(A.replace(",", "."));
+                let numB = parseFloat(B.replace(",", "."));
+
+                if (!isNaN(numA) && !isNaN(numB)) {
+                    return (numA - numB) * dir;
+                }
+
+                return A.localeCompare(B) * dir;
+            });
+
+            $.each(rows, function(_, row) {
+                table.append(row);
+            });
+        }
+
+        function applyCurrentSort() {
+            if (activeColumn !== null) {
+                sortTable(activeColumn);
+            }
+        }
+
+        // ---------- TIMESTAMP FILTER ----------
+        $("#filterTime").click(function() {
+            let from = $("#fromTime").val() ? new Date($("#fromTime").val()) : null;
+            let to = $("#toTime").val() ? new Date($("#toTime").val()) : null;
+
+            $("#tablemeasurements tr:gt(0)").each(function() {
+                let timeText = $(this).children("td").eq(0).text().trim();
+                let rowTime = new Date(timeText);
+
+                let show = true;
+
+                if (from && rowTime < from) show = false;
+                if (to && rowTime > to) show = false;
+
+                $(this).toggle(show);
+            });
         });
-    }
 
-    loadMeasurements();
-</script>
+        $("#clearFilter").click(function() {
+            $("#fromTime, #toTime").val("");
+            $("#tablemeasurements tr").show();
+        });
+    </script>
+
 
 </body>
 

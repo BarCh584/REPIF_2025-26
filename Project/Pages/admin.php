@@ -87,6 +87,20 @@ if (isset($_POST['action'])) {
             $stmt->bind_param("i", $_POST['cid']);
             $stmt->execute();
             break;
+        case 'create_station':
+            $stmt = $conn->prepare("
+        INSERT INTO stations (pk_serialNumber, name, description, fk_user_owns)
+        VALUES (?, ?, ?, ?)
+    ");
+            $stmt->bind_param(
+                "ssss",
+                $_POST['serial'],
+                $_POST['name'],
+                $_POST['description'],
+                $_POST['owner']
+            );
+            $stmt->execute();
+            break;
     }
 
     $username = $_POST['username'] ?? $_GET['username'] ?? '';
@@ -241,6 +255,15 @@ if (isset($_POST['action'])) {
                                                 </td>
                                             </tr>
                                         <?php } ?>
+                                        <form method="POST" class="form-card">
+                                            <h4>Create Station</h4>
+                                            <input required name="serial" placeholder="Serial Number">
+                                            <input name="name" placeholder="Station Name">
+                                            <input name="description" placeholder="Description">
+                                            <input required name="owner" placeholder="Owner Username">
+                                            <button name="action" value="create_station">Create</button>
+                                        </form>
+
                                     </tbody>
                                 </table>
                             <?php } ?>
@@ -274,14 +297,11 @@ if (isset($_POST['action'])) {
                                         <?php while ($collection = $collections->fetch_assoc()) { ?>
                                             <tr>
                                                 <td><?= htmlspecialchars($collection['pk_collection']) ?></td>
-                                                <td><?= htmlspecialchars($collection['name']) ?></td>
+                                                <td><input value="<?= htmlspecialchars($collection['name']) ?>"></td>
                                                 <td class="action-cell">
                                                     <form method="POST">
                                                         <input type="hidden" name="cid" value="<?= htmlspecialchars($collection['pk_collection']) ?>">
-                                                        <button name="action" value="delete_collection"
-                                                            onclick="return confirm('Delete collection?')">
-                                                            Delete
-                                                        </button>
+                                                        <button name="action" value="delete_collection" onclick="return confirm('Delete collection?')">Delete</button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -290,30 +310,15 @@ if (isset($_POST['action'])) {
                                 </table>
                             <?php } ?>
                         </td>
-                        <td class="action-cell">
-                            <form method="POST">
-                                <input type="hidden" name="cid" value="<?= htmlspecialchars($collection['pk_collection']) ?>">
-                                <button name="action" value="delete_collection"
-                                    onclick="return confirm('Delete collection?')">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
                     </tr>
                     <tr>
                         <td colspan="5">
                             <?php
-                            $stmt = $conn->prepare("
-                                SELECT pk_measurement, temperature, humidity, pressure, light, gas, timestamp, fk_station_records
-                                FROM measurements m
-                                JOIN stations s ON s.pk_serialNumber = m.fk_station_records
-                                WHERE s.fk_user_owns = ?
-                            ");
+                            $stmt = $conn->prepare("SELECT * FROM measurements m JOIN stations s ON s.pk_serialNumber = m.fk_station_records WHERE s.fk_user_owns = ?");
                             $stmt->bind_param("s", $user['pk_username']);
                             $stmt->execute();
                             $measurements = $stmt->get_result();
                             ?>
-
                             <h3>Measurements</h3>
                             <?php if ($measurements->num_rows === 0) { ?>
                                 <p>No measurements found.</p>
@@ -323,8 +328,11 @@ if (isset($_POST['action'])) {
                                         <tr>
                                             <th>Measurement ID</th>
                                             <th>Station Serial</th>
-                                            <th>Type</th>
-                                            <th>Value</th>
+                                            <th>Temperature</th>
+                                            <th>Humidity</th>
+                                            <th>Pressure</th>
+                                            <th>Light</th>
+                                            <th>Gas</th>
                                             <th>Timestamp</th>
                                             <th>Actions</th>
                                         </tr>
@@ -334,8 +342,13 @@ if (isset($_POST['action'])) {
                                             <tr>
                                                 <td><?= htmlspecialchars($measurement['pk_measurement']) ?></td>
                                                 <td><?= htmlspecialchars($measurement['fk_station_records']) ?></td>
-                                                <td><?= htmlspecialchars($measurement['measurementType']) ?></td>
-                                                <td><?= htmlspecialchars($measurement['value']) ?></td>
+                                                <td><?= htmlspecialchars($measurement['temperature']); ?></td>
+                                                <td><?= htmlspecialchars($measurement['humidity']); ?></td>
+                                                <td><?= htmlspecialchars($measurement['pressure']); ?></td>
+                                                <td><?= htmlspecialchars($measurement['light']); ?></td>
+                                                <td><?= htmlspecialchars($measurement['gas']); ?></td>
+                                                <td><?= htmlspecialchars($measurement['timestamp']); ?></td>
+                                                <td><?= htmlspecialchars($measurement['fk_station_records']); ?></td>
                                                 <td><?= htmlspecialchars($measurement['timestamp']) ?></td>
                                                 <td class="action-cell">
                                                     <form method="POST">
@@ -356,9 +369,7 @@ if (isset($_POST['action'])) {
                 </tbody>
             </table>
         </div>
-
     <?php } ?>
-
     <?php if (!$user) { ?>
         <form class="form-card" method="POST">
             <h2>Create User</h2>

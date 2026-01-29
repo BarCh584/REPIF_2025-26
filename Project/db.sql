@@ -77,6 +77,7 @@ CREATE TABLE contains (
 CREATE TABLE hasaccess (
   pkfk_user VARCHAR(50) NOT NULL,
   pkfk_collection INT NOT NULL,
+  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (pkfk_user, pkfk_collection),
   FOREIGN KEY (pkfk_user)
     REFERENCES users(pk_username)
