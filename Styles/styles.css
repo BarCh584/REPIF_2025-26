@@ -549,3 +549,20 @@ body.dark-theme .admin-table th {
 body.dark-theme .admin-table tr + tr {
   border-color: #2a2d34;
 }
+.charts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* NEW: container controls size */
+.chart-box {
+    width: 250px;
+    height: 250px;
+}
+
+/* canvas fills the box */
+.chart-box canvas {
+    width: 100% !important;
+    height: 100% !important;
+}

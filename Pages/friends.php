@@ -120,9 +120,11 @@
     $stmt->close();
     ?>
     <h2>Add Friend</h2>
-    <form method="POST">
-        <label>Username</label>
-        <input type="text" name="search_user" required>
+    <form class="form-card" method="POST">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="search_user" required>
+        </div>
         <button type="submit">Search</button>
     </form>
     <?php

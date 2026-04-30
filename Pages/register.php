@@ -9,24 +9,21 @@
 <body class="light-theme">
     <h1>Register</h1>
 
-    <form method="POST">
-        <label>Username</label>
-        <input type="text" name="username" required><br>
-
-        <label>Password</label>
-        <input type="password" name="password" required><br>
-        <label>Confirm Password</label>
-        <input type="password" name="confirmpassword" required><br>
-
-        <label>Email</label>
-        <input type="email" name="email" required><br>
-
-        <label>First Name</label>
-        <input type="text" name="firstname" required><br>
-
-        <label>Last Name</label>
-        <input type="text" name="lastname" required><br>
-
+    <form class="form-card" method="POST">
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" required><br>
+            <label>Password</label>
+            <input type="password" name="password" required><br>
+            <label>Confirm Password</label>
+            <input type="password" name="confirmpassword" required><br>
+            <label>Email</label>
+            <input type="email" name="email" required><br>
+            <label>First Name</label>
+            <input type="text" name="firstname" required><br>
+            <label>Last Name</label>
+            <input type="text" name="lastname" required><br>
+        </div>
         <button>Create Account</button>
     </form>
     <?php
@@ -47,7 +44,7 @@
         if (userAlreadyExists($username)) {
             die("<p>Username already exists!</p>");
         }
-        if(emailAlreadyExists($email)) {
+        if (emailAlreadyExists($email)) {
             die("<p>Email already registered!</p>");
         }
         $hashedpassword = password_hash($password, PASSWORD_DEFAULT);

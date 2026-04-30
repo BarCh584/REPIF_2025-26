@@ -89,18 +89,17 @@
             <b>Description:</b>
             <?php echo htmlspecialchars($collection['description']); ?><br><br>
 
-            (<?php echo htmlspecialchars($collection['started_at']); ?>
-            -
-            <?php echo htmlspecialchars($collection['ended_at']); ?>)
+            <p>Start date:</p><?php echo htmlspecialchars($collection['started_at']); ?>
+            <p>End date:</p><?php echo htmlspecialchars($collection['ended_at']); ?>
             <br><br>
             <?php if ($isOwner) { ?>
                 <h3>Share Collection</h3>
-
-                <form method="POST">
-                    <input type="text" name="username"
-                        placeholder="Username" required>
-                    <button type="submit" name="add_user">Add User</button>
-                </form>
+                <form class="form-card" method="POST">
+                    <div class="form-group" style="display: inline;">
+                        <input type="text" name="username" placeholder="Username" required>
+                        <button type="submit" name="add_user">Add User</button>
+                    </div>
+                </form><br>
 
                 <?php if (isset($error)) { ?>
                     <p style="color:red;">
@@ -154,7 +153,7 @@
                         <th>Station S/N</th>
                     </tr>
                     <?php
-                    $data_stmt = $conn->prepare("SELECT * FROM measurements WHERE fk_station_records = ?   AND timestamp BETWEEN ? AND ? ORDER BY timestamp DESC");
+                    $data_stmt = $conn->prepare("SELECT * FROM measurements WHERE fk_station_records = ? AND timestamp BETWEEN ? AND ? ORDER BY timestamp DESC");
                     $data_stmt->bind_param("sss", $stationSerial, $collection['started_at'], $collection['ended_at']);
                     $data_stmt->execute();
                     $data_result = $data_stmt->get_result();

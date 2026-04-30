@@ -9,15 +9,16 @@
 <body class="light-theme">
     <h1>Register a Station</h1>
 
-    <form method="post">
-        <label>Serial Number
-            <input type="text" name="serial_number" required minlength="7"></label><br>
-        <label>Name
+    <form class="form-card" method="post">
+        <div class="form-group">
+        <label>Serial Number</label>
+            <input type="text" name="serial_number" required minlength="7">
+        <label>Name</label>
             <input type="text" name="name" required>
-        </label><br>
-        <label>Description
-            <input type="text" name="description"></label><br>
+        <label>Description</label>
+            <input type="text" name="description">
         <button type="submit">Register</button>
+        </div>
     </form>
     <?php
     include("../Libraries/conndb.php");

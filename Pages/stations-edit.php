@@ -16,13 +16,15 @@
     $result = $stmt->get_result();
     $station = $result->fetch_assoc();
     ?>
-    <form method="post">
-        <label>Name
+    <form class="form-card" method="post">
+        <div class="form-group">
+        <label>Name</label>
             <input type="text" name="name" value="<?= htmlspecialchars($station['name']) ?>" required>
-        </label><br>
-        <label>Description
-            <input type="text" name="description" value="<?= htmlspecialchars($station['description']) ?>"></label><br>
+        <br>
+        <label>Description</label>
+            <input type="text" name="description" value="<?= htmlspecialchars($station['description']) ?>"><br>
         <button type="submit">Save changes</button>
+        </div>
     </form>
     <?php
     
