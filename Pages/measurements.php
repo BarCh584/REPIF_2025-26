@@ -13,7 +13,7 @@
     include("../Libraries/conndb.php");
     include("../Libraries/createmeasurement.php");
     ?>
-    <?= createnavbar("Measurements"); ?>
+    <?php createnavbar("Measurements"); ?>
     <h1>Measurements</h1>
     <?php
     $selectstationsstmt = $conn->prepare("SELECT * FROM stations WHERE fk_user_owns = ?");
@@ -62,8 +62,6 @@
     <script>
         let sortDirections = {};
         let activeColumn = null;
-
-        // ---------- LOAD DATA ----------
         function start() {
             $.post("../Libraries/createmeasurement.php", {
                 stationslist: $("#stationslist").val()
@@ -72,9 +70,7 @@
                 applyCurrentSort();
             });
         }
-
         $("#createMeasurementButton").click(start);
-
         function loadMeasurements() {
             $.post("../Libraries/showmeasurements.php", {
                 station: $("#stationslist").val()
@@ -82,25 +78,19 @@
                 $("#tablemeasurements").append(data);
             });
         }
-
         loadMeasurements();
-
-        // ---------- SORTING ----------
         $("#tablemeasurements th").each(function(index) {
             sortDirections[index] = 1;
-
             $(this).css("cursor", "pointer").click(function() {
                 if (activeColumn === index) {
                     sortDirections[index] *= -1;
                 } else {
                     activeColumn = index;
                 }
-
                 updateArrows(index);
                 sortTable(index);
             });
         });
-
         function updateArrows(col) {
             $(".arrow").text("");
             let arrow = sortDirections[col] === 1 ? "▲" : "▼";
@@ -141,8 +131,6 @@
                 sortTable(activeColumn);
             }
         }
-
-        // ---------- TIMESTAMP FILTER ----------
         $("#filterTime").click(function() {
             let from = $("#fromTime").val() ? new Date($("#fromTime").val()) : null;
             let to = $("#toTime").val() ? new Date($("#toTime").val()) : null;

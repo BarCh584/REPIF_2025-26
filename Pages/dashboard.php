@@ -78,18 +78,31 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // PHP → JS data
         const rawData = <?php echo json_encode($data); ?>;
-
-        // Extract timestamps (reverse so oldest → newest)
-        const labels = rawData.map(row => row.timestamp).reverse();
-
-        // Helper: extract dataset
-        function getData(key) {
-            return rawData.map(row => Number(row[key])).reverse();
+        const labels = [];
+        const temperatures = [];
+        const humidities = [];
+        const pressures = [];
+        const lights = [];
+        const gases = [];
+        
+        for (let i = rawData.length - 1; i >= 0; i--) {
+            labels.push(rawData[i].timestamp);
+            temperatures.push(Number(rawData[i].temperature));
+            humidities.push(Number(rawData[i].humidity));
+            pressures.push(Number(rawData[i].pressure));
+            lights.push(Number(rawData[i].light));
+            gases.push(Number(rawData[i].gas));
         }
-
-        // Generic chart creator
+        
+        function getData(key) {
+            if (key === 'temperature') return temperatures;
+            if (key === 'humidity') return humidities;
+            if (key === 'pressure') return pressures;
+            if (key === 'light') return lights;
+            if (key === 'gas') return gases;
+            return [];
+        }
         function createChart(canvasId, label, data, color) {
             new Chart(document.getElementById(canvasId), {
                 type: 'line',
