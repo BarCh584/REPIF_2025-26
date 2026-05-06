@@ -34,6 +34,7 @@ CREATE TABLE measurements (
   gas DECIMAL(6,2) NOT NULL,
   timestamp DATETIME NOT NULL,
   fk_station_records VARCHAR(50) NOT NULL,
+  led_mode INT NOT NULL,
   PRIMARY KEY (pk_measurement),
   FOREIGN KEY (fk_station_records)
     REFERENCES stations(pk_serialNumber)
