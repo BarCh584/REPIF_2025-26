@@ -21,47 +21,90 @@
     $selectstationsstmt->execute();
     $result = $selectstationsstmt->get_result();
     ?>
-    <div class="form-card">
-        <div class="form-group">
-            <select name="stationslist" id="stationslist">
-                <?php
-                while ($row = $result->fetch_assoc()) {
-                    echo "<option value='" . $row['pk_serialNumber'] . "'>" . htmlspecialchars($row['name']) . "</option>";
-                }
-                ?>
-            </select>
+    <div class="controls-grid">
+
+        <!-- CREATE MEASUREMENT -->
+        <div class="form-card control-card">
+            <div class="card-title">
+                <h2>Create Measurement</h2>
+                <p>Select a station and generate a new measurement.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="stationslist">Station</label>
+
+                <select name="stationslist" id="stationslist">
+                    <?php
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row['pk_serialNumber'] . "'>" . htmlspecialchars($row['name']) . "</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <button type="submit" id="createMeasurementButton">
+                Create Measurement
+            </button>
         </div>
-        <button type="submit" value="Create measurement" id="createMeasurementButton">Create Measurement</button>
+
+        <!-- FILTER -->
+        <div class="form-card control-card">
+            <div class="card-title">
+                <h2>Filter Measurements</h2>
+                <p>Show measurements within a selected time range.</p>
+            </div>
+
+            <div class="filter-grid">
+
+                <div class="form-group">
+                    <label for="fromTime">From</label>
+                    <input type="datetime-local" id="fromTime">
+                </div>
+
+                <div class="form-group">
+                    <label for="toTime">To</label>
+                    <input type="datetime-local" id="toTime">
+                </div>
+
+            </div>
+
+            <div class="filter-actions">
+                <button id="filterTime">
+                    Apply Filter
+                </button>
+
+                <button id="clearFilter" class="secondary-button">
+                    Clear
+                </button>
+            </div>
+        </div>
+
     </div>
-    <div class="form-card">
-        <div class="form-group">
-            <label>From</label>
-            <input type="datetime-local" id="fromTime">
+
+    <div class="table-card">
+        <div class="table-header">
+            <h2>Measurement Data</h2>
+            <span id="measurementCount"></span>
         </div>
 
-        <div class="form-group">
-            <label>To</label>
-            <input type="datetime-local" id="toTime">
+        <div class="table-wrapper">
+            <table id="tablemeasurements" class="measurement-table">
+                <tr>
+                    <th data-col="0">Time <span class="arrow"></span></th>
+                    <th data-col="1">Temperature <span class="arrow"></span></th>
+                    <th data-col="2">Humidity <span class="arrow"></span></th>
+                    <th data-col="3">Pressure <span class="arrow"></span></th>
+                    <th data-col="4">Light <span class="arrow"></span></th>
+                    <th data-col="5">Gas <span class="arrow"></span></th>
+                </tr>
+            </table>
         </div>
-
-        <button id="filterTime">Filter</button>
-        <button id="clearFilter">Clear</button>
     </div>
-
-    <table id="tablemeasurements">
-        <tr>
-            <th data-col="0">Time <span class="arrow"></span></th>
-            <th data-col="1">Temperature <span class="arrow"></span></th>
-            <th data-col="2">Humidity <span class="arrow"></span></th>
-            <th data-col="3">Pressure <span class="arrow"></span></th>
-            <th data-col="4">Light <span class="arrow"></span></th>
-            <th data-col="5">Gas <span class="arrow"></span></th>
-        </tr>
-    </table>
 
     <script>
         let sortDirections = {};
         let activeColumn = null;
+
         function start() {
             $.post("../Libraries/createmeasurement.php", {
                 stationslist: $("#stationslist").val()
@@ -71,6 +114,7 @@
             });
         }
         $("#createMeasurementButton").click(start);
+
         function loadMeasurements() {
             $.post("../Libraries/showmeasurements.php", {
                 station: $("#stationslist").val()
@@ -91,6 +135,7 @@
                 sortTable(index);
             });
         });
+
         function updateArrows(col) {
             $(".arrow").text("");
             let arrow = sortDirections[col] === 1 ? "▲" : "▼";

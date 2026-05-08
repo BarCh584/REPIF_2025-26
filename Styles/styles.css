@@ -566,3 +566,157 @@ body.dark-theme .admin-table tr + tr {
     width: 100% !important;
     height: 100% !important;
 }
+
+/* =========================
+   MEASUREMENTS TABLE
+========================= */
+
+.table-card {
+  margin-top: 2rem;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.table-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #1f2937;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+}
+
+.measurement-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 750px;
+}
+
+.measurement-table th {
+  background-color: #f3f4f6;
+  color: #374151;
+  text-align: left;
+  padding: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: background-color 0.2s ease;
+}
+
+.measurement-table td {
+  padding: 0.95rem 1rem;
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.95rem;
+}
+
+.measurement-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.measurement-table tr:hover {
+  background-color: #eef2ff;
+  transition: background-color 0.15s ease;
+}
+
+.measurement-table th:hover {
+  background-color: #e5e7eb;
+}
+
+.measurement-table .arrow {
+  margin-left: 0.35rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Align numbers nicely */
+.measurement-table td:not(:first-child) {
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark-theme .table-card {
+  background-color: #16181d;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55);
+}
+
+body.dark-theme .table-header h2 {
+  color: #f9fafb;
+}
+
+body.dark-theme .measurement-table th {
+  background-color: #1f2937;
+  color: #e5e7eb;
+}
+
+body.dark-theme .measurement-table td {
+  border-color: #2a2d34;
+}
+
+body.dark-theme .measurement-table tr:nth-child(even) {
+  background-color: #12151b;
+}
+
+body.dark-theme .measurement-table tr:nth-child(odd) {
+  background-color: #16181d;
+}
+
+body.dark-theme .measurement-table tr:hover {
+  background-color: #1e293b;
+}
+
+body.dark-theme .measurement-table th:hover {
+  background-color: #273449;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .table-card {
+    padding: 1rem;
+  }
+
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .measurement-table th,
+  .measurement-table td {
+    padding: 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+.controls-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: stretch;
+  margin-top: 2rem;
+}
+
+.controls-grid .form-card {
+  flex: 1;
+  min-width: 320px;
+  margin-top: 0;
+}
